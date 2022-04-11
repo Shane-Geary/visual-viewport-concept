@@ -1,17 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
+// Copyright 2022 Glowstik Inc. All rights reserved.
+import './App.css'
+
+import FakeDiv from './FakeDiv'
 
 function App() {
-  return (
-    <div className="App">
-      <div>
-        <input type='text'>Input...</input>
-        <footer>
 
-        </footer>
-      </div>
-    </div>
-  );
+	return (
+		<FakeDiv/>
+	)
 }
 
-export default App;
+export default App
