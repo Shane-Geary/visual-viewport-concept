@@ -1,33 +1,42 @@
 // Copyright 2022 Glowstik Inc. All rights reserved.
 import {useState, useEffect, useRef} from 'react' //React hooks
 
-import iNoBounce from 'inobounce'
+// import iNoBounce from 'inobounce'
 
 import {gsap} from 'gsap' //https://greensock.com/docs/
 
 
 function FakeDiv() {
-	iNoBounce.enable()
+
+	// iNoBounce.enable()
 	//Constant to hold footer height integer
 	const footerHeight = 44
 
 	//State for keeping the visualViewport height from their api
-	const [vvHeight, setVVHeight] = useState(visualViewport.height)
+	const [vvHeight, setVVHeight] = useState(window.visualViewport.height)
+
+	//State for keeping the visualViewport width from their api
+	const [vvWidth, setVVWidth] = useState(window.visualViewport.width)
+
+	const [viewportInnerHeight, setViewportInnerHeight] = useState(window.innerHeight)
+
+	const [viewportInnerWidth, setViewportInnerWidth] = useState(window.innerWidth)
 
 	//Reference for the footer
 	const footerRef = useRef(null)
 
+	//Reference for the input
+	const inputRef = useRef(null)
+
 	//useEffect hook for the gsap animation
-    useEffect(() => {
+	useEffect(() => {
 		const resizeVV = ({current}, newHeight) => {
-			gsap.set(current, {
-				display: 'block'
-			})
-			//gsap timeline 
+			gsap.set(current, {display: 'block'})
+			//gsap timeline
 			gsap.to(current, {
 				top: document.activeElement.id === 'inputTrigger' ? newHeight : '100vh',
 				duration: document.activeElement.id === 'inputTrigger' ? .35 : 0,
-				ease: "elastic.out(.5, 0.5)",
+				ease: 'elastic.out(.5, 0.5)',
 			})
 		}
 
@@ -37,34 +46,52 @@ function FakeDiv() {
 			setVVHeight(visualViewport.height)
 			// setFakeDivTopVal(visualViewport.height - footerHeight)
 		}
-		
-		visualViewport.addEventListener('resize', footerEx)
-    }, [])
 
-    return (
-		//Keeping the height of the container div to be the height of the visualViewport
-        <div style={{
-            height: visualViewport.height,
-            backgroundColor: 'lightgray'
-        }}
-        >
+		window.visualViewport.addEventListener('resize', footerEx)
+	}, [])
+
+	return (
+		<body style={{
+			margin: 0,
+			padding: 0,
+			width: vvWidth,
+			height: vvHeight
+		}}>
+		{/* //Keeping the height of the container div to be the height of the visualViewport */}
+		<div style={{
+			height: visualViewport.height,
+			width: vvWidth,
+			backgroundColor: 'lightgray'
+		}}
+		>
 			<div style={{
-				width: '100%',
-				height: '100%',
+				width: '100vw',
+				height: '100vh',
 				overflow: 'scroll',
 				WebkitOverflowScrolling: 'touch'
 			}}>
+				<div style={{
+					position: 'relative',
+					// left: '0%',
+					display: 'block',
+					fontSize: 'small'
+				}}>
+					Viewport Height: {vvHeight}
+					<div>Inner Viewport Height: {viewportInnerHeight}</div>
+					{/* <div>Viewport Width: {vvWidth}</div>
+					<div>Inner Viewport Width: {viewportInnerWidth}</div> */}
+				</div>
 				{/* The input where events viewport event get triggered */}
-				<input 
-				id='inputTrigger'
-				placeholder='Input...'
-				onBlur={() => {
-					console.log(footerRef)
-					footerRef.current.style.display = 'none'
-				}}
-				style={{
-					marginTop: 20
-				}}
+				<input
+					ref={inputRef}
+					id='inputTrigger'
+					placeholder='Input...'
+					onBlur={() => {
+						console.log(footerRef)
+						footerRef.current.style.display = 'none'
+					}}
+					// onFocus={}
+					style={{marginTop: 20}}
 				/>
 				{/* Paragraph of lorem ipsum filler text */}
 				<p style={{
@@ -83,20 +110,22 @@ function FakeDiv() {
 				</p>
 			</div>
 			{/* Animated footer handled by the gsap functionality defined above */}
-            <div 
-			ref={footerRef}
-			style={{
-                height: footerHeight * 1.5,
-				width: '100%',
-                position: 'absolute',
-                top: '100vh',
-                zIndex: '1',
-                backgroundColor: '#ED2290',
-            	}}
+			<div
+				ref={footerRef}
+				style={{
+					height: footerHeight * 1.5,
+					// height: vvHeight,
+					width: '100%',
+					position: 'absolute',
+					top: '100vh',
+					zIndex: '1',
+					backgroundColor: '#ED2290',
+				}}
 			>
-            </div>
-        </div>
-    )
+			</div>
+		</div>
+	</body>
+	)
 }
 
 export default FakeDiv
