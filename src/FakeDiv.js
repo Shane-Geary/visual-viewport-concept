@@ -15,10 +15,12 @@ function FakeDiv() {
 	//State for keeping the visualViewport height from their api
 	const [vvHeight, setVVHeight] = useState(window.visualViewport.height)
 
+	const [viewportInnerHeight, setViewportInnerHeight] = useState(window.innerHeight)
+
+	const [viewportOuterHeight, setViewportOuterHeight] = useState(window.outerHeight)
+
 	//State for keeping the visualViewport width from their api
 	const [vvWidth, setVVWidth] = useState(window.visualViewport.width)
-
-	const [viewportInnerHeight, setViewportInnerHeight] = useState(window.innerHeight)
 
 	const [viewportInnerWidth, setViewportInnerWidth] = useState(window.innerWidth)
 
@@ -51,13 +53,7 @@ function FakeDiv() {
 	}, [])
 
 	return (
-		<body style={{
-			margin: 0,
-			padding: 0,
-			width: vvWidth,
-			height: vvHeight
-		}}>
-		{/* //Keeping the height of the container div to be the height of the visualViewport */}
+		//Keeping the height of the container div to be the height of the visualViewport
 		<div style={{
 			height: visualViewport.height,
 			width: vvWidth,
@@ -72,14 +68,11 @@ function FakeDiv() {
 			}}>
 				<div style={{
 					position: 'relative',
-					// left: '0%',
 					display: 'block',
 					fontSize: 'small'
 				}}>
-					Viewport Height: {vvHeight}
-					<div>Inner Viewport Height: {viewportInnerHeight}</div>
-					{/* <div>Viewport Width: {vvWidth}</div>
-					<div>Inner Viewport Width: {viewportInnerWidth}</div> */}
+					Height px Ext/VVP/VH: {viewportOuterHeight - viewportInnerHeight}/{viewportInnerHeight}/{viewportOuterHeight}
+					
 				</div>
 				{/* The input where events viewport event get triggered */}
 				<input
@@ -114,17 +107,16 @@ function FakeDiv() {
 				ref={footerRef}
 				style={{
 					height: footerHeight * 1.5,
-					// height: vvHeight,
 					width: '100%',
 					position: 'absolute',
 					top: '100vh',
 					zIndex: '1',
 					backgroundColor: '#ED2290',
+					touchAction: 'none'
 				}}
 			>
 			</div>
 		</div>
-	</body>
 	)
 }
 
