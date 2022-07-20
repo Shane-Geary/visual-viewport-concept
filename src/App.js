@@ -1,12 +1,11 @@
 // Copyright 2022 Glowstik Inc. All rights reserved.
-import './App.css'
 
-import FakeDiv from './FakeDiv'
+import ViewportConcept from "./ViewportConcept"
 
 function App() {
 
 	return (
-		<FakeDiv/>
+		<ViewportConcept />
 	)
 }
 
